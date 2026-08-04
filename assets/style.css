@@ -24,6 +24,50 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+/* Assicura che html e body occupino il 100% dell'altezza */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Previene scroll orizzontale */
+}
+
+/* Il contenitore principale deve essere un flex container verticale */
+main.app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra verticalmente */
+    align-items: center;     /* Centra orizzontalmente */
+    min-height: 100vh;       /* Occupa almeno tutta l'altezza visibile */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Stile per la lista dei pulsanti principali */
+.main-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;               /* Spazio tra i pulsanti */
+    width: 100%;
+    max-width: 400px;        /* Larghezza massima per estetica su desktop */
+}
+
+/* Assicurati che i pulsanti occupino la larghezza desiderata */
+
+.btn-primary, .btn-secondary {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s ease, opacity 0.2s;
+}
+
+.btn-primary:active, .btn-secondary:active {
+    transform: scale(0.98);
+}
+
     body {
       background-color: var(--bg);
       color: var(--text);
