@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Where is it?</title>
+
+  <script>
+    const manifestData = {
+      "name": "Where is it?",
+      "short_name": "Where?",
+      "start_url": "./",
+      "display": "standalone",
+      "background_color": "#0f172a",
+      "theme_color": "#0f172a",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%2338bdf8' width='192' height='192' rx='24'/%3E%3Ctext x='96' y='130' font-size='100' text-anchor='middle' fill='%230f172a'%3E%F0%9F%93%8D%3C/text%3E%3C/svg%3E",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        },
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect fill='%2338bdf8' width='512' height='512' rx='48'/%3E%3Ctext x='256' y='340' font-size='260' text-anchor='middle' fill='%230f172a'%3E%F0%9F%93%8D%3C/text%3E%3C/svg%3E",
+          "sizes": "512x512",
+          "type": "image/svg+xml"
+        }
+      ]
+    };
+    const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
+    const manifestURL = URL.createObjectURL(manifestBlob);
+    const link = document.createElement('link');
+    link.rel = 'manifest';
+    link.href = manifestURL;
+    document.head.appendChild(link);
+  </script>
+
+  <link rel="stylesheet" href="./src/assets/style.css">
+</head>
+<body>
+
+  <div class="app">
+    <header>
+      <h1><span class="title-text">Where is it?</span><span class="title-icon">📍</span></h1>
+      <p class="subtitle">Save and find your location</p>
+    </header>
+
+    <main>
+      <button id="btn-save" class="btn btn-primary">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Save location
+      </button>
+
+      <div id="note-box" class="note-box">
+        <div class="note-input-group">
+          <input type="text" id="note-input" class="note-input" placeholder="Add a note (optional)..." maxlength="50" autocomplete="off">
+        </div>
+        <div class="note-input-group">
+          <button id="btn-save-note" class="btn-small btn-save-note">Save note</button>
+          <button id="btn-skip-note" class="btn-small btn-skip-note">Skip</button>
+        </div>
+      </div>
+
+      <div id="status-box" class="status-box">
+        <div class="status-label">Last saved</div>
+        <div class="status-time" id="status-time">--:--</div>
+        <div class="status-note" id="status-note">-</div>
+      </div>
+
+      <button id="btn-find" class="btn btn-secondary" disabled>
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+        </svg>
+        Where is it?
+      </button>
+
+      <button id="btn-history" class="btn btn-outline">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        History
+      </button>
+
+      <button id="btn-share" class="btn btn-outline" disabled>
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        Share
+      </button>
+    </main>
+
+    <footer>
+      <button id="btn-info" class="info-trigger" aria-label="Information and Privacy">i</button>
+    </footer>
+  </div>
+
+  <!-- History Overlay -->
+  <div id="overlay-history" class="sheet-overlay"></div>
+  <!-- History Bottom Sheet -->
+  <div id="sheet-history" class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <span class="sheet-title">Location history</span>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <button id="btn-clear-all" class="btn-danger-outline">Clear all</button>
+        <button class="btn-close-sheet" id="close-history">✕</button>
+      </div>
+    </div>
+    <div class="sheet-body">
+      <div id="history-list" class="history-list"></div>
+    </div>
+  </div>
+
+  <!-- Privacy Overlay -->
+  <div id="overlay-privacy" class="sheet-overlay"></div>
+  <!-- Privacy Bottom Sheet -->
+  <div id="sheet-privacy" class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <span class="sheet-title">Security & Privacy</span>
+      <button class="btn-close-sheet" id="close-privacy">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="privacy-content">
+        <div class="privacy-item">
+          <strong>1. 100% Local Data</strong>
+          <p>Saved points and notes are stored only on your device. The app has no remote servers.</p>
+        </div>
+        <div class="privacy-item">
+          <strong>2. Zero Tracking</strong>
+          <p>No advertising cookies, no analytics systems or third-party tracking.</p>
+        </div>
+        <div class="privacy-item">
+          <strong>3. No Account Needed</strong>
+          <p>Works completely anonymously without requiring email or registration.</p>
+        </div>
+        <div class="privacy-item">
+          <strong>4. Transparent Permissions</strong>
+          <p>GPS is activated only when you press "Save location".</p>
+        </div>
+        <div class="privacy-item">
+          <strong>5. Encrypted Connection</strong>
+          <p>The app requires HTTPS to ensure maximum security during use.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/core/app.js"></script>
+</body>
+</html>
