@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#121212">
+    <meta name="description" content="Salva la posizione dei tuoi oggetti e ritrovali facilmente. 100% locale e privato.">
+    <title>Where is it?</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <h1>Where is it?</h1>
+            <button id="btn-collections" class="icon-btn" aria-label="Collezioni">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="current-collection-info">
+                <h2 id="current-collection-name">Default Collection</h2>
+                <span id="items-count">0 items</span>
+            </div>
+
+            <button id="btn-save-location" class="primary-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+                Salva Posizione
+            </button>
+
+            <div id="location-status" class="status-message"></div>
+        </main>
+
+        <!-- History Section -->
+        <section id="history-section" class="history-section">
+            <div class="history-header">
+                <h3>Cronologia</h3>
+                <button id="btn-clear-history" class="text-btn">Cancella tutto</button>
+            </div>
+            <div id="history-list" class="history-list"></div>
+        </section>
+    </div>
+
+    <!-- Bottom Sheet: Note Modal -->
+    <div id="note-sheet" class="bottom-sheet">
+        <div class="sheet-content">
+            <h3>Aggiungi una nota (opzionale)</h3>
+            <p class="sheet-subtitle">Es: "Chiavi dell'auto", "Borsa blu"</p>
+            <textarea id="note-input" placeholder="Scrivi qui..." rows="3"></textarea>
+            <div class="sheet-actions">
+                <button id="btn-skip-note" class="secondary-btn">Skip</button>
+                <button id="btn-save-note" class="primary-btn">Salva</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Sheet: Collections Manager -->
+    <div id="collections-sheet" class="bottom-sheet">
+        <div class="sheet-content">
+            <div class="sheet-header">
+                <h3>Le tue Collezioni</h3>
+                <button id="btn-close-collections" class="icon-btn close-btn">&times;</button>
+            </div>
+            
+            <div class="collection-actions">
+                <button id="btn-create-collection" class="secondary-btn full-width">+ Nuova Collezione</button>
+            </div>
+
+            <div id="collections-list" class="collections-list"></div>
+            
+            <div class="sheet-footer">
+                <button id="btn-export-all" class="text-btn">Esporta Tutto</button>
+                <button id="btn-import-data" class="text-btn">Importa Dati</button>
+                <input type="file" id="file-import" accept=".json" style="display:none">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Privacy Info -->
+    <div id="privacy-modal" class="modal">
+        <div class="modal-content">
+            <h3>Privacy & Sicurezza</h3>
+            <ul class="privacy-list">
+                <li>🔒 <strong>100% Locale:</strong> I dati restano sul tuo dispositivo</li>
+                <li>🚫 <strong>Niente Tracking:</strong> Nessuna raccolta dati o analytics</li>
+                <li>🌐 <strong>Offline First:</strong> Funziona senza connessione</li>
+                <li>🔐 <strong>Niente Account:</strong> Nessuna registrazione richiesta</li>
+                <li>💾 <strong>Tu controlli i dati:</strong> Export/Import sempre disponibili</li>
+            </ul>
+            <button id="btn-close-privacy" class="primary-btn full-width">Ho capito</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script type="module" src="src/app.js"></script>
+</body>
+</html>
