@@ -117,11 +117,14 @@
       margin-top: 0.2rem;
     }
 
-    main {
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-    }
+    <main class="app-container">
+        <div class="main-actions">
+            <button id="btn-save" class="btn-primary">📍 Save my location</button>
+            <button id="btn-history" class="btn-secondary">📜 View history</button>
+            <button id="btn-privacy" class="btn-secondary">🔒 Privacy & Security</button>
+        </div>
+        <!-- Altri elementi come modal o bottom sheet vanno fuori da qui -->
+    </main>
 
     .btn {
       width: 100%;
